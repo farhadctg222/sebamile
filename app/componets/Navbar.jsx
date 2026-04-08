@@ -8,7 +8,7 @@ import React from 'react';
 const Navbar = () => {
     return (
         <header className="py-5 sticky  top-0 bg-[#1F5F5B] xl:py-8 text-">
-            <div className="container  mx-auto flex justify-between  items-center">
+            <div className="container  mx-auto flex  justify-between  items-center">
                {/* logo */}
                 <Link href="/">
                 <h1 className=" ml-5 text-2xl md:text-lg md:text-md text-white font-extrabold">
@@ -16,11 +16,9 @@ const Navbar = () => {
                 </h1>
                 </Link>
                 {/* desktop nav & hire me button */}
-                <div className=" hidden xl:flex items-center gap-3">
+                <div className=" hidden  xl:flex items-center gap-3">
                    <Nav></Nav>
-                    <Link href="/contact">
-                    <button className=" bg-amber-400 text-white mr-5">Donation</button>
-                    </Link>
+                    
 
                 </div>
                 {/* mobile nav */}

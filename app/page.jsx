@@ -4,6 +4,7 @@ import PackageCard from "./componets/packageCard";
 import FAQPage from "./componets/faq";
 import Sponsors from "./componets/Sponsors";
 import OrderTracking from "./componets/OrderTracking"
+import StaffPage from "./staff/page";
 // ✅ better error handling
 async function getPackages() {
   try {
@@ -40,6 +41,7 @@ export default async function Home() {
           </p>
         )}
       </div>
+      <StaffPage></StaffPage>
       <Sponsors></Sponsors>
      <OrderTracking></OrderTracking>
       <FAQPage></FAQPage>

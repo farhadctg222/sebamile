@@ -14,13 +14,13 @@ const Nav = () => {
             path:"/"
         },
         {
-            name:'Service',
-            path:"/service"
+            name:'Login',
+            path:"/login"
         },
         
         {
             name:'Stuff',
-            path:"/stuff"
+            path:"/staff"
         },
         {
             name:'Contact',

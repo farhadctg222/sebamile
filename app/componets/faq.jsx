@@ -25,7 +25,7 @@ export default function FAQPage() {
   const [openIndex, setOpenIndex] = useState(null);
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6 flex flex-col items-center">
+    <div className="bg-gray-50 p-6 flex flex-col items-center">
       <h1 className="text-4xl font-bold text-green-600 mb-8 text-center">
         সাধারণ জিজ্ঞাসা
       </h1>

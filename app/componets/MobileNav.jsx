@@ -15,24 +15,14 @@ const pathname = usePathname()
             path:'/'
         },
         {
-            name: 'service',
-            path:'/service'
-        },
-       
-        {
             name: 'staff',
             path:'/staff'
         },
-       
         {
-            name: 'Director',
-            path:'/director'
-        },
+            name: 'login',
+            path:'/login'
+        }
        
-        {
-            name: 'History',
-            path:'/history'
-        },
        
 
        
@@ -43,22 +33,22 @@ const pathname = usePathname()
     <SheetTrigger className="flex justify-center items-center">
       <FiAlignJustify />
         </SheetTrigger>
-    <SheetContent className="flex text-accent flex-col">
+    <SheetContent className="flex text-accent bg-cyan-800 flex-col">
       {/* <div className="text-center mt-20">
-     <h2 className="text-2xl text-green bg-white text-red-800" >{session?.data?.user?.name}</h2>
+     {/* <h2 className="text-2xl text-green bg-white text-red-800" >{session?.data?.user?.name}</h2>
      <h2>{session?.data?.user?.type}</h2>
-       {session?.data?.user?.image && <Image alt={session?.data?.user?.name} width={50} height={50} className='m-auto mt-5'   src={session?.data?.user?.image}></Image>}
-      </div> */}
-       {/* loago */}
+       {session?.data?.user?.image && <Image alt={session?.data?.user?.name} width={50} height={50} className='m-auto mt-5'   src={session?.data?.user?.image}></Image>} */}
+      {/* </div> */}
+       
         
-          <div className="mt-32 md-40 text-center text-md text-accent">
+          <div className="mt-32 md-40 text-center bg-cyan-500 text-md text-accent">
             <Link href="/">
-            <h1 className="text-accent">AdvocateLinker<span className="text-[#66fcc2]">.</span> </h1>
+            <h1 className="text-accent">SebaMile<span className="text-[#66fcc2]">.</span> </h1>
             </Link>
         
 
           </div>
-          <nav className="flex flex-col justify-center items-center gap-5">
+          <nav className="flex flex-col justify-center  items-center gap-5">
             {
               links.map((links,index)=>{
                 return(

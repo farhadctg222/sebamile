@@ -16,7 +16,7 @@ export default function Sponsors() {
   if (!sponsors.length) return null; // loading বা no data
 
   return (
-    <section className="bg-gray-100 py-10">
+    <section className="bg-gray-100 ">
       <div className="max-w-6xl mx-auto px-6">
         <h2 className="text-3xl font-bold text-center text-green-600 mb-8">
           Our Sponsors
