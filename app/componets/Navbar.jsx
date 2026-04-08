@@ -1,13 +1,40 @@
-export default function Navbar() {
-  return (
-    <nav className="bg-white shadow p-4 flex justify-between items-center sticky top-0 z-50">
-      <h1 className="text-2xl font-bold text-orange-500">Sebamile</h1>
-      <ul className="flex space-x-6 text-gray-700 font-medium">
-        <li><a href="/" className="hover:text-orange-500">Home</a></li>
-        <li><a href="/packages" className="hover:text-orange-500">Packages</a></li>
-        <li><a href="/order" className="hover:text-orange-500">Order</a></li>
-        <li><a href="/login" className="hover:text-orange-500">Login</a></li>
-      </ul>
-    </nav>
-  );
-}
+
+import Link from 'next/link';
+import MobileNav from './MobileNav';
+import Nav from './Nav';
+import React from 'react';
+
+
+const Navbar = () => {
+    return (
+        <header className="py-5 sticky  top-0 bg-[#1F5F5B] xl:py-8 text-">
+            <div className="container  mx-auto flex justify-between  items-center">
+               {/* logo */}
+                <Link href="/">
+                <h1 className=" ml-5 text-2xl md:text-lg md:text-md text-white font-extrabold">
+                    SebaMile<span className="text-red">.</span><span>com</span>
+                </h1>
+                </Link>
+                {/* desktop nav & hire me button */}
+                <div className=" hidden xl:flex items-center gap-3">
+                   <Nav></Nav>
+                    <Link href="/contact">
+                    <button className=" bg-amber-400 text-white mr-5">Donation</button>
+                    </Link>
+
+                </div>
+                {/* mobile nav */}
+                <div className="xl:hidden  mr-5">
+                   <MobileNav></MobileNav>
+
+                </div>
+               
+
+            </div>
+
+        </header>
+      
+    );
+};
+
+export default Navbar;
