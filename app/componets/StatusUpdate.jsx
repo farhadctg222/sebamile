@@ -44,7 +44,6 @@ export default function StatusUpdate({ id, onUpdate }) {
     });
 
     if (res.ok) {
-      alert("Deleted!");
       onUpdate && onUpdate(); // Refresh parent table
     } else {
       alert("Delete failed");
