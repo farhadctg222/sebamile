@@ -40,7 +40,7 @@ export default function Sponsors() {
               <img
                 src={sponsor.logo}
                 alt={sponsor.name}
-                className="max-h-full max-w-full object-contain"
+                className=""
                 />
                       </div>
             </motion.a>

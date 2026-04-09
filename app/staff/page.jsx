@@ -31,7 +31,7 @@ export default function StaffPage() {
   ];
 
   return (
-    <div className="bg-linear-to-br from-green-100 to-gray-100 p-6">
+    <div className="bg-linear-to-br overflow-hidden from-green-100 to-gray-100 p-6">
 
       {/* Header */}
       <div className="text-center mb-10">
