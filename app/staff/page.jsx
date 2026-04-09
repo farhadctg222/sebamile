@@ -31,7 +31,7 @@ export default function StaffPage() {
   ];
 
   return (
-    <div className="bg-linear-to-br overflow-hidden from-green-100 to-gray-100 p-6">
+    <div className="bg-linear-to-br  from-green-100 to-gray-100 p-6">
 
       {/* Header */}
       <div className="text-center mb-10">
@@ -57,7 +57,7 @@ export default function StaffPage() {
           >
 
             {/* Image */}
-            <div className="relative w-full h-56 overflow-hidden">
+            <div className="relative z-0 w-full h-56  overflow-hidden">
               <Image
                 src={s.image}
                 alt={s.role}

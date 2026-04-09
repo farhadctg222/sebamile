@@ -17,13 +17,13 @@ export default function Sponsors() {
   if (!sponsors.length) return null;
 
   return (
-    <section className="bg-gray-100 overflow-hidden py-10">
+    <section className="bg-gray-100  py-10">
       <div className="max-w-6xl mx-auto px-6">
         <h2 className="text-3xl font-bold text-center text-green-600 mb-8">
           Our Sponsors
         </h2>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2  justify-center sm:grid-cols-3 md:grid-cols-4 gap-6">
           {sponsors.map((sponsor, index) => (
             <motion.a
               key={sponsor.id}
@@ -40,7 +40,7 @@ export default function Sponsors() {
               <img
                 src={sponsor.logo}
                 alt={sponsor.name}
-                className=""
+                className="w-auto h-24 object-contain"
                 />
                       </div>
             </motion.a>
