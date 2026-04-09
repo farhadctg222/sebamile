@@ -18,6 +18,8 @@ export default function OrderPage({ params }) {
   const [showModal, setShowModal] = useState(false);
   const [orderId, setOrderId] = useState(null);
   const [totalPrice, setTotalPrice] = useState(0);
+  const [areas, setAreas] = useState([]);
+  console.log(areas)
 
   // ✅ Fetch package data from backend
   useEffect(() => {
@@ -31,6 +33,13 @@ export default function OrderPage({ params }) {
       })
       .catch((err) => console.error(err));
   }, [id]);
+
+  useEffect(() => {
+  fetch("/api/areas")
+    .then((res) => res.json())
+    .then((data) => setAreas(data))
+    .catch((err) => console.error(err));
+}, []);
 
   // ✅ Validation
   const validate = () => {
@@ -129,15 +138,18 @@ export default function OrderPage({ params }) {
           />
 
           <select
-            className="w-full border rounded-lg p-3"
-            value={form.area_id}
-            onChange={(e) => setForm({ ...form, area_id: e.target.value })}
-          >
-            <option value="">Select Area</option>
-            <option value="1">Court Hill</option>
-            <option value="2">New Market</option>
-            <option value="3">Chowkbazar</option>
-          </select>
+  className="w-full border rounded-lg p-3"
+  value={form.area_id}
+  onChange={(e) => setForm({ ...form, area_id: e.target.value })}
+>
+  <option value="">Select Area</option>
+
+  {areas.map((area) => (
+    <option key={area.id} value={area.id}>
+      {area.name}
+    </option>
+  ))}
+</select>
 
           <input
             type="number"
