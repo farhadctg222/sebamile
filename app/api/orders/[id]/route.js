@@ -30,12 +30,32 @@ export async function PUT(req, context) {
       ]);
     }
 
-    if (body.phone !== undefined || body.address !== undefined) {
-      await db.execute(
-        "UPDATE orders SET phone=?, address=? name=? WHERE id=?",
-        [body.phone, body.address, id, body.name]
-      );
-    }
+   const body = await req.json();
+
+// ✅ status update
+if (body.status) {
+  await db.execute("UPDATE orders SET status=? WHERE id=?", [
+    body.status,
+    id,
+  ]);
+}
+
+// ✅ edit (name + phone + address)
+if (
+  body.name !== undefined ||
+  body.phone !== undefined ||
+  body.address !== undefined
+) {
+  await db.execute(
+    "UPDATE orders SET customer_name=?, phone=?, address=? WHERE id=?",
+    [
+      body.name,
+      body.phone,
+      body.address,
+      id
+    ]
+  );
+}
 
     return Response.json({ success: true });
 
