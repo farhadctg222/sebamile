@@ -2,10 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Navbar from "./componets/Navbar";
 import Footer from "./componets/Footer";
-import { Geist } from "next/font/google";
-import { cn } from "@/lib/utils";
-
-const geist = Geist({subsets:['latin'],variable:'--font-sans'});
+import CartProvider from "./context/CartContext";   
 
 export const metadata: Metadata = {
   title: "SebaMile Online Food Delivery Service",
@@ -19,10 +16,14 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="en" className={cn("font-sans", geist.variable)}>
+      lang="en" className="">
       <body className="min-h-full flex flex-col">
         <Navbar></Navbar>
+      <CartProvider> 
         {children}
+        </CartProvider>
+       
+      
         <Footer></Footer>
         </body>
     </html>

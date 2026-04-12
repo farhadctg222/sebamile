@@ -26,6 +26,11 @@ const Nav = () => {
             name:'Contact',
             path:"/contact"
         },
+        {
+            name:'🛒 Cart',
+            path:"/cart"
+        },
+
         
     ]
     

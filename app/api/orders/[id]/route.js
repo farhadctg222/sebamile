@@ -1,42 +1,83 @@
+
+
 import { db } from "../../../lib/db";
+import { verifyToken } from "../../../lib/auth";
 
-export async function PUT(req, { params }) {
-  const { id } = await params;
-  const { status } = await req.json();
-  console.log(id, status)
+// ======================
+// PUT - UPDATE STATUS
+// ======================
+export async function PUT(req, context) {
+  try {
+    const raw = req.headers.get("authorization");
 
-  await db.execute(
-    "UPDATE orders SET status=? WHERE id=?",
-    [status, id]
-  );
+    const token = raw?.startsWith("Bearer ")
+      ? raw.replace("Bearer ", "")
+      : raw;
 
-  return Response.json({ success: true });
+    if (!token || !verifyToken(token)) {
+      return Response.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const { id } = await context.params;
+
+    // 🔥 👉 এইখানে বসবে তোমার code
+    const body = await req.json();
+
+    if (body.status) {
+      await db.execute("UPDATE orders SET status=? WHERE id=?", [
+        body.status,
+        id,
+      ]);
+    }
+
+    if (body.phone !== undefined || body.address !== undefined) {
+      await db.execute(
+        "UPDATE orders SET phone=?, address=? name=? WHERE id=?",
+        [body.phone, body.address, id, body.name]
+      );
+    }
+
+    return Response.json({ success: true });
+
+  } catch (err) {
+    console.error(err);
+    return Response.json({ error: "Server error" }, { status: 500 });
+  }
 }
 
-// ✅ DELETE API
 
+// ======================
+// DELETE ORDER
+// ======================
+export async function DELETE(req, context) {
+  try {
+    const token = req.headers.get("authorization")?.replace("Bearer ", "");
 
-export async function DELETE(req, { params }) {
-  // ❌ old: const id = params;
-  const { id } = await params; // ✅ destructure correctly
-  console.log("Deleting order with ID:", id);
+    if (!token || !verifyToken(token)) {
+      return Response.json({ error: "Unauthorized" }, { status: 401 });
+    }
 
-  if (!id) {
-    return new Response(JSON.stringify({ error: "Invalid ID" }), {
-      status: 400,
-      headers: { "Content-Type": "application/json" },
+    const params = await context.params; // 🔥 SAFE FIX
+    const id = Number(params.id);
+
+    if (!id) {
+      return Response.json({ error: "Invalid ID" }, { status: 400 });
+    }
+
+    await db.execute(
+      "DELETE FROM orders WHERE id=?",
+      [id]
+    );
+
+    return Response.json({
+      success: true,
+      message: "Order deleted",
     });
+
+  } catch (err) {
+    console.error("DELETE ERROR:", err);
+    return Response.json({ error: "Server error" }, { status: 500 });
   }
-
-  // ❌ id এখন string, যদি DB expect number হয় তবে convert:
-  const numericId = Number(id);
-
-  await db.execute("DELETE FROM orders WHERE id=?", [numericId]);
-
-  return new Response(JSON.stringify({ success: true }), {
-    status: 200,
-    headers: { "Content-Type": "application/json" },
-  });
 }
 
 
@@ -90,3 +131,5 @@ export async function GET(req, { params }) {
     );
   }
 }
+
+
