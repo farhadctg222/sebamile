@@ -21,6 +21,10 @@ const pathname = usePathname()
         {
             name: 'login',
             path:'/login'
+        },
+        {
+          name: '🛒cart',
+          path: '/cart'
         }
        
        
