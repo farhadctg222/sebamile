@@ -23,14 +23,7 @@ export async function PUT(req, context) {
     // 🔥 👉 এইখানে বসবে তোমার code
     const body = await req.json();
 
-    if (body.status) {
-      await db.execute("UPDATE orders SET status=? WHERE id=?", [
-        body.status,
-        id,
-      ]);
-    }
-
-   const body = await req.json();
+    
 
 // ✅ status update
 if (body.status) {
