@@ -48,6 +48,7 @@ import { useEffect, useState } from "react";
 
 export default function Dashboard() {
   const [orders, setOrders] = useState([]);
+  console.log(orders)
 
   // ✅ edit state
   const [editId, setEditId] = useState(null);

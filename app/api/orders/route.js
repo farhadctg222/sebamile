@@ -14,6 +14,7 @@ export async function POST(req) {
     total,
     items // ✅ new (cart)
   } = body;
+  console.log(body)
 
   // ✅ Case 1: Cart Order (multiple items)
   if (items && items.length > 0) {
@@ -39,7 +40,7 @@ export async function POST(req) {
           [
             orderId,
             Number(item.id),
-            1,
+             Number(item.quantity || 1),
             Number(item.price)
           ]
         );
