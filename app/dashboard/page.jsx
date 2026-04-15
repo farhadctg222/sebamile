@@ -43,14 +43,15 @@
 
 "use client";
 
+
 import StatusUpdate from "../componets/StatusUpdate";
+import Invoice from "../componets/Invoice";
 import { useEffect, useState } from "react";
 
 export default function Dashboard() {
   const [orders, setOrders] = useState([]);
-  console.log(orders)
+  const [selectedOrder, setSelectedOrder] = useState(null);
 
-  // ✅ edit state
   const [editId, setEditId] = useState(null);
   const [editData, setEditData] = useState({
     name: "",
@@ -87,12 +88,12 @@ export default function Dashboard() {
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
 
-      {/* Header */}
+      {/* HEADER */}
       <h1 className="text-3xl font-bold mb-6 text-gray-800">
         📦 Orders Dashboard
       </h1>
 
-      {/* Orders Grid */}
+      {/* ORDERS GRID */}
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
 
         {orders.length === 0 ? (
@@ -103,18 +104,16 @@ export default function Dashboard() {
           orders.map((o) => (
             <div
               key={o.id}
-              className="bg-white p-5 rounded-xl shadow hover:shadow-lg transition duration-300"
+              className="bg-white p-5 rounded-xl shadow hover:shadow-lg transition"
             >
 
               {/* HEADER */}
               <div className="flex justify-between items-start mb-2">
 
                 <div>
-                  <h2 className="text-lg font-semibold text-gray-800">
+                  <h2 className="text-lg font-semibold">
                     {o.customer_name}
                   </h2>
-
-                  {/* 🔥 ORDER NUMBER */}
                   <p className="text-xs text-gray-500">
                     Order # {o.id}
                   </p>
@@ -127,20 +126,25 @@ export default function Dashboard() {
                 </span>
               </div>
 
-              {/* CONTACT */}
+              {/* PHONE */}
               <p className="text-sm text-gray-600">
                 📞 {o.phone}
               </p>
 
               {/* ITEMS */}
               <div className="mt-2 mb-2">
-                <strong className="text-sm text-gray-700">Items:</strong>
+                <strong className="text-sm">Items:</strong>
 
                 {o.items && o.items.length > 0 ? (
                   <ul className="text-sm text-gray-600 mt-1 space-y-1">
                     {o.items.map((item, i) => (
-                      <li key={i}>
-                        • {item.name} (x{item.quantity || 1})
+                      <li key={i} className="flex justify-between">
+                        <span> 
+                          • {item.name} <span>৳ {item.price}</span> (x{item.quantity || 1})
+                        </span>
+                        <span>
+                          ৳ {item.price * (item.quantity || 1)}
+                        </span>
                       </li>
                     ))}
                   </ul>
@@ -151,7 +155,7 @@ export default function Dashboard() {
                 )}
               </div>
 
-              {/* PRICE */}
+              {/* TOTAL */}
               <p className="text-sm text-gray-600">
                 💰 Total: <strong>৳ {o.total_price}</strong>
               </p>
@@ -164,7 +168,7 @@ export default function Dashboard() {
               {/* STATUS */}
               <div className="mt-3 mb-3">
                 <span
-                  className={`px-3 py-1 text-xs font-medium rounded-full text-white
+                  className={`px-3 py-1 text-xs rounded-full text-white
                   ${o.status === "pending" && "bg-gray-500"}
                   ${o.status === "confirmed" && "bg-blue-500"}
                   ${o.status === "cooking" && "bg-yellow-500"}
@@ -179,49 +183,54 @@ export default function Dashboard() {
               {/* ACTIONS */}
               <div className="flex justify-between items-center">
 
-                {/* STATUS UPDATE */}
+                {/* STATUS */}
                 <StatusUpdate id={o.id} onUpdate={loadOrders} />
 
-                {/* EDIT BUTTON */}
-                <button
-                  onClick={() => {
-                    setEditId(o.id);
-                    setEditData({
-                      name: o.customer_name,
-                      phone: o.phone,
-                      address: o.address,
-                    });
-                  }}
-                  className="text-blue-600 text-sm"
-                >
-                  Edit
-                </button>
+                <div className="flex gap-3">
+
+                  {/* INVOICE BUTTON */}
+                  <button
+                    onClick={() => setSelectedOrder(o)}
+                    className="text-purple-600 text-sm"
+                  >
+                    Invoice
+                  </button>
+
+                  {/* EDIT */}
+                  <button
+                    onClick={() => {
+                      setEditId(o.id);
+                      setEditData({
+                        name: o.customer_name,
+                        phone: o.phone,
+                        address: o.address,
+                      });
+                    }}
+                    className="text-blue-600 text-sm"
+                  >
+                    Edit
+                  </button>
+                </div>
               </div>
 
               {/* EDIT FORM */}
               {editId === o.id && (
                 <div className="mt-3 p-3 border rounded bg-gray-50">
 
-
-                   <input
+                  <input
                     className="border p-2 w-full mb-2"
                     value={editData.name}
                     onChange={(e) =>
-                      setEditData({
-                        ...editData,
-                        name: e.target.value,
-                      })
+                      setEditData({ ...editData, name: e.target.value })
                     }
-                    placeholder="Name"/>
+                    placeholder="Name"
+                  />
 
                   <input
                     className="border p-2 w-full mb-2"
                     value={editData.phone}
                     onChange={(e) =>
-                      setEditData({
-                        ...editData,
-                        phone: e.target.value,
-                      })
+                      setEditData({ ...editData, phone: e.target.value })
                     }
                     placeholder="Phone"
                   />
@@ -230,10 +239,7 @@ export default function Dashboard() {
                     className="border p-2 w-full mb-2"
                     value={editData.address}
                     onChange={(e) =>
-                      setEditData({
-                        ...editData,
-                        address: e.target.value,
-                      })
+                      setEditData({ ...editData, address: e.target.value })
                     }
                     placeholder="Address"
                   />
@@ -244,14 +250,14 @@ export default function Dashboard() {
                       onClick={async () => {
                         const token = localStorage.getItem("token");
 
-                       await fetch(`/api/orders/${o.id}`, {
-                        method: "PUT",
+                        await fetch(`/api/orders/${o.id}`, {
+                          method: "PUT",
                           headers: {
                             "Content-Type": "application/json",
-                            authorization: `Bearer ${token}`, // 🔥 FIX
-                              },
-                                 body: JSON.stringify(editData),
-                                });
+                            authorization: `Bearer ${token}`,
+                          },
+                          body: JSON.stringify(editData),
+                        });
 
                         setEditId(null);
                         loadOrders();
@@ -276,6 +282,26 @@ export default function Dashboard() {
           ))
         )}
       </div>
+
+      {/* ================= MODAL ================= */}
+      {selectedOrder && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+
+          <div className="bg-white p-4 rounded-lg max-w-3xl w-full">
+
+            <button
+              onClick={() => setSelectedOrder(null)}
+              className="text-red-500 float-right"
+            >
+              ❌ Close
+            </button>
+
+            <Invoice order={selectedOrder} />
+          </div>
+
+        </div>
+      )}
+
     </div>
   );
 }
