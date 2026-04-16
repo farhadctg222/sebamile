@@ -4,11 +4,14 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { FiAlignJustify } from "react-icons/fi";
+import { useCart } from "../context/CartContext";
+
 
 
 const  MobileNav =  ()=> {
 const pathname = usePathname()
-
+const { cart } = useCart()
+console.log(cart)
     const links = [
         {
             name: 'home',
@@ -34,9 +37,19 @@ const pathname = usePathname()
   return (
 
     <Sheet>
-    <SheetTrigger className="flex justify-center items-center">
-      <FiAlignJustify />
-        </SheetTrigger>
+    <SheetTrigger className="relative flex justify-center items-center">
+  
+  {/* ICON */}
+  <FiAlignJustify className="text-2xl" />
+
+  {/* BADGE */}
+  {cart.length > 0 && (
+    <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full">
+      {cart.length}
+    </span>
+  )}
+
+</SheetTrigger>
     <SheetContent className="flex text-accent bg-cyan-800 flex-col">
       {/* <div className="text-center mt-20">
      {/* <h2 className="text-2xl text-green bg-white text-red-800" >{session?.data?.user?.name}</h2>
@@ -52,23 +65,39 @@ const pathname = usePathname()
         
 
           </div>
-          <nav className="flex flex-col justify-center  items-center gap-5">
-            {
-              links.map((links,index)=>{
-                return(
-                  <Link href={links.path}
-                  key={index}
-                  className={`${links.path === pathname && "text-[#37ff02] border-b-2 border-accent"}  text-md text-sm text-[#37ff02] capitalize hover:text-accent transition-all `}>
-                    {links.name}
+          <nav className="flex flex-col justify-center items-center gap-5">
+  
+  {links
+    .filter(link => link.path !== "/cart")
+    .map((link, index) => (
+      <Link
+        href={link.path}
+        key={index}
+        className={`text-md text-sm capitalize hover:text-accent transition-all ${
+          link.path === pathname
+            ? "text-[#37ff02] border-b-2 border-accent"
+            : "text-[#37ff02]"
+        }`}
+      >
+        {link.name}
+      </Link>
+    ))}
 
-                  </Link>
+  {/* 🔥 CART WITH BADGE */}
+  <Link
+    href="/cart"
+    className="relative text-md text-sm capitalize text-[#37ff02] hover:text-accent transition-all"
+  >
+    🛒 Cart
 
-                 
-                )
+    {cart.length > 0 && (
+      <span className="absolute -top-2 -right-4 bg-red-500 text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full">
+        {cart.length}
+      </span>
+    )}
+  </Link>
 
-              })
-            }
-          </nav>
+</nav>
           {/* {session.status === "authenticated" ? <Link className="text-center" href='' onClick={handle}><button className="btn-sm btn btn-success ">LogOut</button></Link> :  <Link className="text-center" onClick={direct} href="/api/auth/signin"><button className="btn-sm btn btn-success ">LogIn</button></Link>} */}
       
       
