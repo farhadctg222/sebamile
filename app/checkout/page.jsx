@@ -55,7 +55,7 @@ export default function Checkout() {
       });
 
       const data = await res.json();
-      console.log("API RESPONSE:", data);
+      
 
       if (!res.ok) {
         alert(data.error || "Order failed!");
