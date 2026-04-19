@@ -67,6 +67,7 @@ export default function Checkout() {
 
       // ✅ show modal
       setShowModal(true);
+      //ok
 
     } catch (err) {
       console.error(err);
