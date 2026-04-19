@@ -25,9 +25,9 @@ export async function POST(req) {
     try {
       // 🔥 main order insert
       const [orderResult] = await db.execute(
-        `INSERT INTO orders (customer_name, phone, address, total_price) 
-         VALUES (?, ?, ?, ?)`,
-        [name, phone, address || null, Number(total || 0)]
+        `INSERT INTO orders (customer_name, phone, address, delivery_note, total_price) 
+         VALUES (?, ?, ?, ?, ?)`,
+        [name, phone, address || null, body.delivery_note || null, Number(total || 0)]
       );
 
       const orderId = orderResult.insertId;

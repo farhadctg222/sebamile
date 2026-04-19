@@ -8,23 +8,24 @@ export default function Checkout() {
   const { cart } = useCart();
   const router = useRouter();
 
+  const [showModal, setShowModal] = useState(false);
+  const [loading, setLoading] = useState(false);
+
   const [form, setForm] = useState({
     name: "",
     phone: "",
     address: "",
+    delivery_note: "",
   });
+  console.log(form)
 
-  const [loading, setLoading] = useState(false);
-
-  // ✅ quantity সহ total
   const total = cart.reduce(
     (sum, item) => sum + item.price * item.quantity,
     0
   );
 
-  // ✅ submit
+  // ✅ order submit
   const handleSubmit = async () => {
-    // 🔥 validation
     if (!form.name || !form.phone || !form.address) {
       alert("সব তথ্য পূরণ করুন");
       return;
@@ -41,12 +42,13 @@ export default function Checkout() {
       const res = await fetch("/api/orders", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json", // ✅ VERY IMPORTANT
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           name: form.name,
           phone: form.phone,
           address: form.address,
+          delivery_note: form.delivery_note, // ✅ delivery note added
           items: cart,
           total,
         }),
@@ -59,10 +61,8 @@ export default function Checkout() {
         return;
       }
 
-      alert("✅ Order placed successfully!");
-
-      // ✅ redirect
-      router.push("/order-success");
+      // ✅ show modal instead of instant redirect
+      setShowModal(true);
 
     } catch (err) {
       console.error(err);
@@ -95,7 +95,16 @@ export default function Checkout() {
         onChange={(e) => setForm({ ...form, address: e.target.value })}
       />
 
-      {/* Cart Preview */}
+      {/* ✅ Delivery Note */}
+      <textarea
+        placeholder="Delivery Note (optional)"
+        className="border p-2 w-full mb-2 rounded"
+        onChange={(e) =>
+          setForm({ ...form, delivery_note: e.target.value })
+        }
+      />
+
+      {/* Order Summary */}
       <div className="mt-4">
         <h2 className="font-semibold mb-2">Order Summary:</h2>
 
@@ -109,19 +118,42 @@ export default function Checkout() {
         ))}
       </div>
 
-      {/* Total */}
       <h2 className="mt-4 font-bold text-lg">
         Total: ৳ {total}
       </h2>
 
-      {/* Button */}
       <button
         onClick={handleSubmit}
         disabled={loading}
-        className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 mt-4 rounded w-full"
+        className="bg-green-600 text-white px-4 py-2 mt-4 rounded w-full"
       >
         {loading ? "Placing..." : "Place Order"}
       </button>
+
+      {/* ✅ MODAL */}
+      {showModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center">
+          <div className="bg-white p-6 rounded-xl w-75 text-center">
+            <h2 className="text-xl font-bold mb-2">
+              🎉 Order Placed!
+            </h2>
+
+            <p className="text-sm mb-4">
+              Your food is being processed
+            </p>
+
+            <button
+              onClick={() => {
+                setShowModal(false);
+                router.push("/order-success");
+              }}
+              className="bg-green-600 text-white px-4 py-2 rounded"
+            >
+              OK
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -43,7 +43,6 @@
 
 "use client";
 
-
 import StatusUpdate from "../componets/StatusUpdate";
 import Invoice from "../componets/Invoice";
 import { useEffect, useState } from "react";
@@ -59,30 +58,52 @@ export default function Dashboard() {
     address: "",
   });
 
-  // ======================
-  // LOAD ORDERS
-  // ======================
-  const loadOrders = () => {
-    const token = localStorage.getItem("token");
+  // 🔊 SOUND FUNCTION
+  const playSound = () => {
+    const audio = new Audio("/notification.mp3");
+    audio.play().catch((e) => console.log("sound blocked", e));
+  };
 
-    fetch("/api/orders", {
-      headers: {
-        authorization: token,
-      },
-    })
-      .then(async (res) => {
+  // ======================
+  // LOAD + AUTO REFRESH
+  // ======================
+  useEffect(() => {
+    let prevLength = 0;
+
+    const loadAndCheck = async () => {
+      const token = localStorage.getItem("token");
+
+      try {
+        const res = await fetch("/api/orders", {
+          headers: {
+            authorization: token,
+          },
+        });
+
         if (!res.ok) {
           const text = await res.text();
           throw new Error(text);
         }
-        return res.json();
-      })
-      .then((data) => setOrders(data))
-      .catch((err) => console.error("Failed to load orders:", err));
-  };
 
-  useEffect(() => {
-    loadOrders();
+        const data = await res.json();
+
+        // 🔔 নতুন order detect করলে sound বাজবে
+        if (data.length > prevLength && prevLength !== 0) {
+          playSound();
+        }
+
+        prevLength = data.length;
+        setOrders(data);
+      } catch (err) {
+        console.error("Failed to load orders:", err);
+      }
+    };
+
+    loadAndCheck(); // প্রথম load
+
+    const interval = setInterval(loadAndCheck, 20000); // 20 sec refresh
+
+    return () => clearInterval(interval);
   }, []);
 
   return (
@@ -139,7 +160,7 @@ export default function Dashboard() {
                   <ul className="text-sm text-gray-600 mt-1 space-y-1">
                     {o.items.map((item, i) => (
                       <li key={i} className="flex justify-between">
-                        <span> 
+                        <span>
                           • {item.name} <span>৳ {item.price}</span> (x{item.quantity || 1})
                         </span>
                         <span>
@@ -165,6 +186,13 @@ export default function Dashboard() {
                 📍 {o.area_name || ""} - {o.address}
               </p>
 
+              {/* DELIVERY NOTE */}
+              {o.delivery_note && (
+                <p className="text-sm text-gray-600 mt-1">
+                  📝 Note: {o.delivery_note}
+                </p>
+              )}
+
               {/* STATUS */}
               <div className="mt-3 mb-3">
                 <span
@@ -183,12 +211,10 @@ export default function Dashboard() {
               {/* ACTIONS */}
               <div className="flex justify-between items-center">
 
-                {/* STATUS */}
-                <StatusUpdate id={o.id} onUpdate={loadOrders} />
+                <StatusUpdate id={o.id} onUpdate={() => {}} />
 
                 <div className="flex gap-3">
 
-                  {/* INVOICE BUTTON */}
                   <button
                     onClick={() => setSelectedOrder(o)}
                     className="text-purple-600 text-sm"
@@ -196,7 +222,6 @@ export default function Dashboard() {
                     Invoice
                   </button>
 
-                  {/* EDIT */}
                   <button
                     onClick={() => {
                       setEditId(o.id);
@@ -210,6 +235,7 @@ export default function Dashboard() {
                   >
                     Edit
                   </button>
+
                 </div>
               </div>
 
@@ -260,7 +286,6 @@ export default function Dashboard() {
                         });
 
                         setEditId(null);
-                        loadOrders();
                       }}
                       className="bg-green-600 text-white px-3 py-1 rounded"
                     >
@@ -283,7 +308,7 @@ export default function Dashboard() {
         )}
       </div>
 
-      {/* ================= MODAL ================= */}
+      {/* MODAL */}
       {selectedOrder && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
 
