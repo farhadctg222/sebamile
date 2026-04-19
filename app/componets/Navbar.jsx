@@ -11,8 +11,7 @@ const Navbar = () => {
   
 
   return (
-    <header
-      className={`fixed w-full top-0  z-50 transition-all duration-300 bg-cyan-800 shadow-md`}>
+    <header className="fixed top-0 w-full z-50 bg-cyan-800 shadow-md">
       <div className="container mx-auto flex justify-between items-center">
         
         {/* logo */}
