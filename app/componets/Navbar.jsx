@@ -6,25 +6,13 @@ import Nav from "./Nav";
 import React, { useEffect, useState } from "react";
 
 const Navbar = () => {
-  const [scrolled, setScrolled] = useState(false);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
-    };
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  
 
   return (
     <header
-      className={`fixed w-full top-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? "bg-[#1F5F5B]/95 backdrop-blur-md shadow-md py-3"
-          : "bg-[#1F5F5B] py-5"
-      }`}
-    >
+      className={`fixed w-full top-0  z-50 transition-all duration-300 bg-cyan-800 shadow-md`}>
       <div className="container mx-auto flex justify-between items-center">
         
         {/* logo */}

@@ -18,8 +18,8 @@ export default function RootLayout({
     <html
       lang="en" className="">
       <body className="min-h-full flex flex-col">
-      <CartProvider> 
-        <Navbar></Navbar>
+      <CartProvider > 
+        <Navbar ></Navbar>
         {children}
         </CartProvider>
        
