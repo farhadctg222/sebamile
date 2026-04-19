@@ -17,12 +17,13 @@ export default function RootLayout({
   return (
     <html
       lang="en" className="">
-      <body className="min-h-screen flex flex-col overflow-x-hidden">
+      <body className="">
       <CartProvider > 
-        <Navbar ></Navbar>
-       <main className="flex-1 pt-20">
+       <div className="mb-10"> <Navbar ></Navbar></div>
+      
             {children}
-          </main>
+       
+
         </CartProvider>
        
       
