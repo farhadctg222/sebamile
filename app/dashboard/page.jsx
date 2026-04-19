@@ -60,7 +60,7 @@ export default function Dashboard() {
 
   // 🔊 SOUND FUNCTION
   const playSound = () => {
-    const audio = new Audio("/notification.mp3");
+    const audio = new Audio("/Notification.mp3");
     audio.play().catch((e) => console.log("sound blocked", e));
   };
 
