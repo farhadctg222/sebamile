@@ -40,7 +40,7 @@ const Nav = () => {
         🛒 Cart
 
         {cart.length > 0 && (
-          <span className="absolute -top-2 -right-3 bg-red-500 text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full">
+          <span className="absolute -top-2  bg-red-500 text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full">
             {cart.length}
           </span>
         )}

@@ -60,7 +60,7 @@ console.log(cart)
         
           <div className="mt-32 md-40 text-center bg-cyan-500 text-md text-accent">
             <Link href="/">
-            <h1 className="text-accent">SebaMile<span className="text-[#66fcc2]">.</span> </h1>
+            <h1 className="text-accent">খাওয়া<span className="text-[#66fcc2]">.অনলাইন</span> </h1>
             </Link>
         
 
