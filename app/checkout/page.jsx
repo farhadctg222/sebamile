@@ -9,6 +9,7 @@ export default function Checkout() {
   const router = useRouter();
 
   const [showModal, setShowModal] = useState(false);
+  const [orderId, setOrderId] = useState(null); // ✅ new
   const [loading, setLoading] = useState(false);
 
   const [form, setForm] = useState({
@@ -17,7 +18,6 @@ export default function Checkout() {
     address: "",
     delivery_note: "",
   });
-  console.log(form)
 
   const total = cart.reduce(
     (sum, item) => sum + item.price * item.quantity,
@@ -48,20 +48,24 @@ export default function Checkout() {
           name: form.name,
           phone: form.phone,
           address: form.address,
-          delivery_note: form.delivery_note, // ✅ delivery note added
+          delivery_note: form.delivery_note,
           items: cart,
           total,
         }),
       });
 
       const data = await res.json();
+      console.log("API RESPONSE:", data);
 
       if (!res.ok) {
         alert(data.error || "Order failed!");
         return;
       }
 
-      // ✅ show modal instead of instant redirect
+      // ✅ order id save
+     setOrderId(data.insertId);
+
+      // ✅ show modal
       setShowModal(true);
 
     } catch (err) {
@@ -95,7 +99,7 @@ export default function Checkout() {
         onChange={(e) => setForm({ ...form, address: e.target.value })}
       />
 
-      {/* ✅ Delivery Note */}
+      {/* Delivery Note */}
       <textarea
         placeholder="Delivery Note (optional)"
         className="border p-2 w-full mb-2 rounded"
@@ -131,29 +135,30 @@ export default function Checkout() {
       </button>
 
       {/* ✅ MODAL */}
-      {showModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center">
-          <div className="bg-white p-6 rounded-xl w-75 text-center">
-            <h2 className="text-xl font-bold mb-2">
-              🎉 Order Placed!
-            </h2>
+     {showModal && (
+  <div className="fixed inset-0 bg-black/50 flex items-center justify-center">
+    <div className="bg-white p-6 rounded-xl w-80 text-center">
 
-            <p className="text-sm mb-4">
-              Your food is being processed
-            </p>
+      <h2 className="text-xl font-bold mb-2">
+        🎉 Order Placed!
+      </h2>
 
-            <button
-              onClick={() => {
-                setShowModal(false);
-                router.push("/order-success");
-              }}
-              className="bg-green-600 text-white px-4 py-2 rounded"
-            >
-              OK
-            </button>
-          </div>
-        </div>
-      )}
+      <p className="mb-3">
+        Order No: <strong>#{orderId}</strong>
+      </p>
+
+      <button
+        onClick={() => {
+          router.push(`/ordersuccess?id=${orderId}`);
+        }}
+        className="bg-green-600 text-white px-4 py-2 rounded"
+      >
+        OK
+      </button>
+
+    </div>
+  </div>
+)}
     </div>
   );
 }
