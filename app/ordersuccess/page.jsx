@@ -1,7 +1,8 @@
 "use client";
 
 import { Suspense } from "react";
-import OrderSuccessContent from "./OrderSuccessContent/page";
+import OrderSuccessContent from "./OrderSuccessContent/OrderSuccessContent";
+
 
 
 export default function OrderSuccessPage() {
