@@ -101,7 +101,7 @@ export default function Dashboard() {
 
     loadAndCheck(); // প্রথম load
 
-    const interval = setInterval(loadAndCheck, 20000); // 20 sec refresh
+    // const interval = setInterval(loadAndCheck, 20000); // 20 sec refresh
 
     return () => clearInterval(interval);
   }, []);
