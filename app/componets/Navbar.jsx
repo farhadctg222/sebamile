@@ -15,7 +15,7 @@ const Navbar = () => {
   <div className="flex justify-between items-center w-full  max-w-7xl mx-auto">
     
     <Link href="/">
-      <h1 className="text-lg md:text-xl text-white font-extrabold">
+      <h1 className="text-lg m-3 md:text-xl text-white font-extrabold">
         khawa<span className="text-red-500">.</span>online
       </h1>
     </Link>

@@ -37,7 +37,7 @@ console.log(cart)
   return (
 
     <Sheet>
-   <SheetTrigger className="relative flex justify-center items-center z-50">
+   <SheetTrigger className="relative flex justify-center m-3 items-center z-50 ">
   
   {/* ICON */}
   <FiAlignJustify className="text-2xl" />
