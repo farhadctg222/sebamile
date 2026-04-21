@@ -19,7 +19,7 @@ export default function RootLayout({
       lang="en" className="">
       <body className="">
       <CartProvider > 
-       <div className="mb-10"> <Navbar ></Navbar></div>
+       <div className=""> <Navbar ></Navbar></div>
       
             {children}
        

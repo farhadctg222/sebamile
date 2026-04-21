@@ -11,27 +11,25 @@ const Navbar = () => {
   
 
   return (
-   <header className="fixed top-0 w-full z-1  bg-cyan-800 shadow-md">
-  <div className="w-full p-3 flex justify-between items-center ">
-        
-        {/* logo */}
-        <Link href="/">
-          <h1 className="ml-5 text-lg md:text-xl text-white font-extrabold">
-            khawa<span className="text-red-500">.</span>online
-          </h1>
-        </Link>
+   <div className="fixed top-0 left-0 right-0 z-50 bg-cyan-800 shadow-md">
+  <div className="flex justify-between items-center w-full  max-w-7xl mx-auto">
+    
+    <Link href="/">
+      <h1 className="text-lg md:text-xl text-white font-extrabold">
+        khawa<span className="text-red-500">.</span>online
+      </h1>
+    </Link>
 
-        {/* desktop nav */}
-        <div className="hidden xl:flex items-center gap-3">
-          <Nav />
-        </div>
+    <div className="hidden xl:flex items-center gap-3">
+      <Nav />
+    </div>
 
-        {/* mobile nav */}
-        <div className="xl:hidden mr-5">
-          <MobileNav />
-        </div>
-      </div>
-    </header>
+    <div className="xl:hidden">
+      <MobileNav />
+    </div>
+
+  </div>
+</div>
   );
 };
 
