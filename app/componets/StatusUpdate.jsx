@@ -40,15 +40,48 @@ export default function StatusUpdate({ id, onUpdate }) {
   };
 
   return (
-    <div className="flex gap-2 flex-wrap">
+  <div className="flex gap-2 flex-wrap">
 
-      <button onClick={() => update("confirmed")}>Confirm</button>
-      <button onClick={() => update("cooking")}>Cooking</button>
-      <button onClick={() => update("delivered")}>Delivered</button>
-      <button onClick={() => update("cancelled")}>Cancel</button>
+    <button
+      onClick={() => update("confirmed")}
+      disabled={loading}
+      className="px-3 py-1.5 bg-blue-500 text-white rounded-lg shadow hover:bg-blue-600 transition text-sm"
+    >
+      Confirm
+    </button>
 
-      <button onClick={deleteOrder}>Delete</button>
+    <button
+      onClick={() => update("cooking")}
+      disabled={loading}
+      className="px-3 py-1.5 bg-yellow-500 text-white rounded-lg shadow hover:bg-yellow-600 transition text-sm"
+    >
+      Cooking
+    </button>
 
-    </div>
-  );
+    <button
+      onClick={() => update("delivered")}
+      disabled={loading}
+      className="px-3 py-1.5 bg-green-500 text-white rounded-lg shadow hover:bg-green-600 transition text-sm"
+    >
+      Delivered
+    </button>
+
+    <button
+      onClick={() => update("cancelled")}
+      disabled={loading}
+      className="px-3 py-1.5 bg-gray-500 text-white rounded-lg shadow hover:bg-gray-600 transition text-sm"
+    >
+      Cancel
+    </button>
+
+    <button
+      onClick={deleteOrder}
+      disabled={loading}
+      className="px-3 py-1.5 bg-red-500 text-white rounded-lg shadow hover:bg-red-600 transition text-sm"
+    >
+      Delete
+    </button>
+
+  </div>
+);
 }

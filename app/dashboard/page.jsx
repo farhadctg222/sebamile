@@ -65,43 +65,51 @@ export default function Dashboard() {
   };
 
   // ======================
-  // LOAD + AUTO REFRESH
+  // 🔥 LOAD ORDERS FUNCTION (MAIN FIX)
+  // ======================
+  const loadOrders = async (prevLengthRef) => {
+    const token = localStorage.getItem("token");
+
+    try {
+      const res = await fetch("/api/orders", {
+        headers: {
+          authorization: token,
+        },
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to fetch");
+      }
+
+      const data = await res.json();
+
+      // 🔔 নতুন order detect
+      if (
+        prevLengthRef.current !== 0 &&
+        data.length > prevLengthRef.current
+      ) {
+        playSound();
+      }
+
+      prevLengthRef.current = data.length;
+
+      setOrders(data);
+    } catch (err) {
+      console.error("Failed to load orders:", err);
+    }
+  };
+
+  // ======================
+  // AUTO REFRESH
   // ======================
   useEffect(() => {
-    let prevLength = 0;
+    const prevLengthRef = { current: 0 };
 
-    const loadAndCheck = async () => {
-      const token = localStorage.getItem("token");
+    loadOrders(prevLengthRef);
 
-      try {
-        const res = await fetch("/api/orders", {
-          headers: {
-            authorization: token,
-          },
-        });
-
-        if (!res.ok) {
-          const text = await res.text();
-          throw new Error(text);
-        }
-
-        const data = await res.json();
-
-        // 🔔 নতুন order detect করলে sound বাজবে
-        if (data.length > prevLength && prevLength !== 0) {
-          playSound();
-        }
-
-        prevLength = data.length;
-        setOrders(data);
-      } catch (err) {
-        console.error("Failed to load orders:", err);
-      }
-    };
-
-    loadAndCheck(); // প্রথম load
-
-    const interval = setInterval(loadAndCheck, 20000); // 20 sec refresh
+    const interval = setInterval(() => {
+      loadOrders(prevLengthRef);
+    }, 20000);
 
     return () => clearInterval(interval);
   }, []);
@@ -130,7 +138,6 @@ export default function Dashboard() {
 
               {/* HEADER */}
               <div className="flex justify-between items-start mb-2">
-
                 <div>
                   <h2 className="text-lg font-semibold">
                     {o.customer_name}
@@ -161,7 +168,7 @@ export default function Dashboard() {
                     {o.items.map((item, i) => (
                       <li key={i} className="flex justify-between">
                         <span>
-                          • {item.name} <span>৳ {item.price}</span> (x{item.quantity || 1})
+                          • {item.name} ৳ {item.price} (x{item.quantity || 1})
                         </span>
                         <span>
                           ৳ {item.price * (item.quantity || 1)}
@@ -186,13 +193,6 @@ export default function Dashboard() {
                 📍 {o.area_name || ""} - {o.address}
               </p>
 
-              {/* DELIVERY NOTE */}
-              {o.delivery_note && (
-                <p className="text-sm text-gray-600 mt-1">
-                  📝 Note: {o.delivery_note}
-                </p>
-              )}
-
               {/* STATUS */}
               <div className="mt-3 mb-3">
                 <span
@@ -211,7 +211,8 @@ export default function Dashboard() {
               {/* ACTIONS */}
               <div className="flex justify-between items-center">
 
-                <StatusUpdate id={o.id} onUpdate={() => {}} />
+                {/* 🔥 FIXED: instant update */}
+                <StatusUpdate id={o.id} onUpdate={() => loadOrders({ current: orders.length })} />
 
                 <div className="flex gap-3">
 
@@ -249,7 +250,6 @@ export default function Dashboard() {
                     onChange={(e) =>
                       setEditData({ ...editData, name: e.target.value })
                     }
-                    placeholder="Name"
                   />
 
                   <input
@@ -258,7 +258,6 @@ export default function Dashboard() {
                     onChange={(e) =>
                       setEditData({ ...editData, phone: e.target.value })
                     }
-                    placeholder="Phone"
                   />
 
                   <input
@@ -267,7 +266,6 @@ export default function Dashboard() {
                     onChange={(e) =>
                       setEditData({ ...editData, address: e.target.value })
                     }
-                    placeholder="Address"
                   />
 
                   <div className="flex gap-2">
@@ -276,7 +274,7 @@ export default function Dashboard() {
                       onClick={async () => {
                         const token = localStorage.getItem("token");
 
-                        await fetch(`/api/orders/${o.id}`, {
+                        const res = await fetch(`/api/orders/${o.id}`, {
                           method: "PUT",
                           headers: {
                             "Content-Type": "application/json",
@@ -285,7 +283,10 @@ export default function Dashboard() {
                           body: JSON.stringify(editData),
                         });
 
-                        setEditId(null);
+                        if (res.ok) {
+                          setEditId(null);
+                          loadOrders({ current: orders.length });
+                        }
                       }}
                       className="bg-green-600 text-white px-3 py-1 rounded"
                     >
@@ -323,7 +324,6 @@ export default function Dashboard() {
 
             <Invoice order={selectedOrder} />
           </div>
-
         </div>
       )}
 

@@ -17,7 +17,7 @@ export default function RootLayout({
   return (
     <html
       lang="en" className="">
-      <body className="">
+      <body className="mt-8">
       <CartProvider > 
        <div className=""> <Navbar ></Navbar></div>
       
