@@ -192,6 +192,12 @@ export default function Dashboard() {
               <p className="text-sm text-gray-600">
                 📍 {o.area_name || ""} - {o.address}
               </p>
+              {/* DELIVERY NOTE */}
+              {o.delivery_note && (
+                <p className="text-sm text-gray-600 mt-1">
+                  📝 Note: {o.delivery_note}
+                </p>
+              )}
 
               {/* STATUS */}
               <div className="mt-3 mb-3">
