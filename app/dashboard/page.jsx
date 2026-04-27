@@ -45,12 +45,13 @@
 
 import StatusUpdate from "../componets/StatusUpdate";
 import Invoice from "../componets/Invoice";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 export default function Dashboard() {
   const [orders, setOrders] = useState([]);
   const [selectedOrder, setSelectedOrder] = useState(null);
-
+const prevLengthRef = useRef(0);
+const [soundEnabled, setSoundEnabled] = useState(false);
   const [editId, setEditId] = useState(null);
   const [editData, setEditData] = useState({
     name: "",
@@ -60,62 +61,69 @@ export default function Dashboard() {
 
   // 🔊 SOUND FUNCTION
   const playSound = () => {
-    const audio = new Audio("/Notification.mp3");
-    audio.play().catch((e) => console.log("sound blocked", e));
-  };
+  if (!soundEnabled) return;
+
+  const audio = new Audio("/Notification.mp3");
+  audio.play().catch(() => {});
+};
 
   // ======================
   // 🔥 LOAD ORDERS FUNCTION (MAIN FIX)
   // ======================
-  const loadOrders = async (prevLengthRef) => {
-    const token = localStorage.getItem("token");
+  const loadOrders = async () => {
+  const token = localStorage.getItem("token");
 
-    try {
-      const res = await fetch("/api/orders", {
-        headers: {
-          authorization: token,
-        },
-      });
+  try {
+    const res = await fetch("/api/orders", {
+      headers: {
+        authorization: token,
+      },
+    });
 
-      if (!res.ok) {
-        throw new Error("Failed to fetch");
-      }
+    const data = await res.json();
 
-      const data = await res.json();
-
-      // 🔔 নতুন order detect
-      if (
-        prevLengthRef.current !== 0 &&
-        data.length > prevLengthRef.current
-      ) {
-        playSound();
-      }
-
-      prevLengthRef.current = data.length;
-
-      setOrders(data);
-    } catch (err) {
-      console.error("Failed to load orders:", err);
+    if (
+      prevLengthRef.current !== 0 &&
+      data.length > prevLengthRef.current
+    ) {
+      playSound();
     }
-  };
+
+    prevLengthRef.current = data.length;
+    setOrders(data);
+
+  } catch (err) {
+    console.error(err);
+  }
+};
 
   // ======================
   // AUTO REFRESH
   // ======================
   useEffect(() => {
-    const prevLengthRef = { current: 0 };
+  loadOrders();
 
-    loadOrders(prevLengthRef);
-
-    const interval = setInterval(() => {
-      loadOrders(prevLengthRef);
-    }, 20000);
-
-    return () => clearInterval(interval);
-  }, []);
+  const interval = setInterval(loadOrders, 20000);
+  return () => clearInterval(interval);
+}, [soundEnabled]);
 
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
+
+
+      {!soundEnabled && (
+  <button
+    onClick={() => {
+      const audio = new Audio("/Notification.mp3");
+      audio.play().then(() => {
+        setSoundEnabled(true);
+      });
+    }}
+    className="bg-green-600 text-white px-4 py-2 rounded mb-4"
+  >
+    🔊 Enable Sound
+  </button>
+)}
 
       {/* HEADER */}
       <h1 className="text-3xl font-bold mb-6 text-gray-800">
