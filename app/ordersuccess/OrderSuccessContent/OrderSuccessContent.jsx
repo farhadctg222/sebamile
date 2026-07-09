@@ -38,14 +38,18 @@ export default function OrderSuccessContent() {
 
         {/* DELIVERY TIME */}
         <div className="bg-green-100 p-3 rounded mb-4 text-sm text-green-800">
-          ⏱️ আনুমানিক ডেলিভারি সময়: <b>30 - 45 মিনিট</b>
+          ⏱️ আনুমানিক ডেলিভারি সময়: <b>নাস্তা ডেলিভারি 10-15 মিনিট সময় লাগতে পারে</b>
+          <br />
+          লাঞ্চ দুপুর <b>1.30 - 2.30 মিনিট</b>
+          <br /> <b>বিশেষ নির্দেশ: অর্ডার করার সময় আপনার ঠিকানা সঠিকভাবে দিন</b>
+          <br /> 
         </div>
 
         {/* CONTACT INFO */}
         <div className="bg-gray-100 p-4 rounded text-sm text-gray-700 mb-6">
           <p className="font-semibold mb-1">📞 Contact Support</p>
           <p>01305573617</p>
-          <p>121/B Dowell Bhaban, Court Hill</p>
+          <p>121/B, Ist Floor, Dowell Bhaban, Court Hill</p>
           <p>Chattogram</p>
         </div>
 

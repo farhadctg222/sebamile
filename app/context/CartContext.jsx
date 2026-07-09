@@ -41,10 +41,12 @@ export default function CartProvider({ children }) {
   const deleteFromCart = (id) => {
     setCart((prev) => prev.filter((item) => item.id !== id));
   };
-
+const clearCart = () => {
+  setCart([]);
+};
   return (
     <CartContext.Provider
-      value={{ cart, addToCart, removeFromCart, deleteFromCart }}
+      value={{ cart, addToCart, removeFromCart, deleteFromCart, clearCart }}
     >
       {children}
     </CartContext.Provider>

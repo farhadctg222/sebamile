@@ -9,7 +9,7 @@ export default function Footer() {
         
         {/* About */}
         <div className="space-y-2">
-          <h3 className="font-bold text-lg">Sebamiles Food</h3>
+          <h3 className="font-bold text-lg">Khawa.Online Food</h3>
           <p className="text-gray-200 text-sm">
             আমরা তাজা, সুস্বাদু এবং নিরাপদ খাবার সরবরাহ করি। দ্রুত ডেলিভারি এবং গ্রাহক সন্তুষ্টি আমাদের মূল লক্ষ্য।
           </p>
@@ -41,8 +41,8 @@ export default function Footer() {
         <div className="space-y-2">
           <h3 className="font-bold text-lg">Contact Us</h3>
           <p className="text-gray-200 text-sm">📞 +880 1305573617</p>
-          <p className="text-gray-200 text-sm">✉ support@sebamiles.com</p>
-          <p className="text-gray-200 text-sm">🏠 Chattogram, Bangladesh</p>
+          <p className="text-gray-200 text-sm">✉ farhadctg222@gmail.com</p>
+          <p className="text-gray-200 text-sm">🏠 121/B, Ist Floor, Dowell Bhaban, Court Hill, Chattogram, Bangladesh</p>
         </div>
 
         {/* Social */}
@@ -59,7 +59,7 @@ export default function Footer() {
 
       {/* Bottom Bar */}
       <div className="bg-green-700 text-gray-200 text-sm text-center py-4 mt-6">
-        © {new Date().getFullYear()} Sebamiles Food. All rights reserved.
+        © {new Date().getFullYear()} Khawa.Online Food. All rights reserved.
       </div>
     </footer>
   );

@@ -5,8 +5,9 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 export default function Checkout() {
-  const { cart } = useCart();
+  const { cart, clearCart } = useCart();
   const router = useRouter();
+ 
 
   const [showModal, setShowModal] = useState(false);
   const [orderId, setOrderId] = useState(null); // ✅ new
@@ -64,6 +65,7 @@ export default function Checkout() {
 
       // ✅ order id save
      setOrderId(data.insertId);
+     clearCart(); // ✅ clear cart after order
 
       // ✅ show modal
       setShowModal(true);
