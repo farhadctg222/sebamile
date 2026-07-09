@@ -39,7 +39,7 @@ export default function StaffPage() {
           👥 Our Team
         </h1>
         <p className="text-gray-600 mt-2">
-          Dedicated Team Behind Sebamiles
+          Dedicated Team Behind khawa.online ensuring quality and timely service for our customers.
         </p>
       </div>
 
@@ -93,7 +93,7 @@ export default function StaffPage() {
 
       {/* Footer */}
       <div className="text-center mt-12 text-gray-500 text-sm">
-        Powered by Sebamiles 🚀
+        Powered by Khawa.Online 🚀
       </div>
     </div>
   );
