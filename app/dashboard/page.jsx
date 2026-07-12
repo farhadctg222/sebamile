@@ -48,6 +48,7 @@ import Invoice from "../componets/Invoice";
 import { useEffect, useState, useRef } from "react";
 
 export default function Dashboard() {
+  const [role, setRole] = useState("");
   const [orders, setOrders] = useState([]);
   const [selectedOrder, setSelectedOrder] = useState(null);
 const prevLengthRef = useRef(0);
@@ -100,10 +101,20 @@ const [soundEnabled, setSoundEnabled] = useState(false);
   // ======================
   // AUTO REFRESH
   // ======================
-  useEffect(() => {
+//   useEffect(() => {
+//   loadOrders();
+
+//   const interval = setInterval(loadOrders, 20000);
+//   return () => clearInterval(interval);
+// }, [soundEnabled]);
+useEffect(() => {
+  const userRole = localStorage.getItem("role");
+  setRole(userRole);
+
   loadOrders();
 
   const interval = setInterval(loadOrders, 20000);
+
   return () => clearInterval(interval);
 }, [soundEnabled]);
 
@@ -226,7 +237,13 @@ const [soundEnabled, setSoundEnabled] = useState(false);
               <div className="flex justify-between items-center">
 
                 {/* 🔥 FIXED: instant update */}
-                <StatusUpdate id={o.id} onUpdate={() => loadOrders({ current: orders.length })} />
+                {/* <StatusUpdate id={o.id} onUpdate={() => loadOrders({ current: orders.length })} /> */}
+                {role === "admin" && (
+                <StatusUpdate
+                  id={o.id}
+                  onUpdate={() => loadOrders()}
+                />
+              )}
 
                 <div className="flex gap-3">
 
@@ -237,6 +254,20 @@ const [soundEnabled, setSoundEnabled] = useState(false);
                     Invoice
                   </button>
 
+                  {/* <button
+                    onClick={() => {
+                      setEditId(o.id);
+                      setEditData({
+                        name: o.customer_name,
+                        phone: o.phone,
+                        address: o.address,
+                      });
+                    }}
+                    className="text-blue-600 text-sm"
+                  >
+                    Edit
+                  </button> */}
+                  {role === "admin" && (
                   <button
                     onClick={() => {
                       setEditId(o.id);
@@ -250,8 +281,9 @@ const [soundEnabled, setSoundEnabled] = useState(false);
                   >
                     Edit
                   </button>
+                )}
 
-                </div>
+                  </div>
               </div>
 
               {/* EDIT FORM */}
