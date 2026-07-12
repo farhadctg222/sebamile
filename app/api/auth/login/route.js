@@ -1,6 +1,6 @@
 // /app/api/auth/login/route.js
 import jwt from "jsonwebtoken";
-
+import db from "./lib/db";
 export async function POST(req) {
   const { email, password } = await req.json();
 
