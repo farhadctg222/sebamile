@@ -1,4 +1,5 @@
-import { db } from "../../lib/db";
+
+import database from "@/app/lib/db";
 import { verifyToken } from "../../lib/auth";
 
 export async function POST(req) {
@@ -24,7 +25,7 @@ export async function POST(req) {
 
     try {
       // 🔥 main order insert
-      const [orderResult] = await db.execute(
+      const [orderResult] = await database.execute(
         `INSERT INTO orders (customer_name, phone, address, delivery_note, total_price) 
          VALUES (?, ?, ?, ?, ?)`,
         [name, phone, address || null, body.delivery_note || null, Number(total || 0)]
@@ -34,7 +35,7 @@ export async function POST(req) {
 
       // 🔥 insert each item
       for (const item of items) {
-        await db.execute(
+        await database.execute(
           `INSERT INTO order_items (order_id, package_id, quantity, price) 
            VALUES (?, ?, ?, ?)`,
           [
@@ -60,7 +61,7 @@ export async function POST(req) {
   }
 
   try {
-    const [result] = await db.execute(
+    const [result] = await database.execute(
       `INSERT INTO orders 
       (customer_name, phone, address, package_id, area_id, quantity, total_price) 
       VALUES (?, ?, ?, ?, ?, ?, ?)`,
@@ -96,7 +97,7 @@ export async function GET(req) {
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const [orders] = await db.execute(`
+    const [orders] = await database.execute(`
       SELECT orders.*, areas.name as area_name
       FROM orders
       LEFT JOIN areas ON orders.area_id = areas.id
@@ -105,7 +106,7 @@ export async function GET(req) {
 
     // items attach
     for (let order of orders) {
-      const [items] = await db.execute(
+      const [items] = await database.execute(
         `SELECT order_items.*, packages.name
          FROM order_items
          JOIN packages ON order_items.package_id = packages.id

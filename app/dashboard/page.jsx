@@ -72,30 +72,41 @@ const [soundEnabled, setSoundEnabled] = useState(false);
   // 🔥 LOAD ORDERS FUNCTION (MAIN FIX)
   // ======================
   const loadOrders = async () => {
-  const token = localStorage.getItem("token");
 
-  try {
-    const res = await fetch("/api/orders", {
-      headers: {
-        authorization: token,
-      },
-    });
+ const token = localStorage.getItem("token");
 
-    const data = await res.json();
 
-    if (
-      prevLengthRef.current !== 0 &&
-      data.length > prevLengthRef.current
-    ) {
-      playSound();
-    }
+ try {
 
-    prevLengthRef.current = data.length;
-    setOrders(data);
+  const res = await fetch("/api/orders", {
 
-  } catch (err) {
-    console.error(err);
+   headers:{
+    Authorization:`Bearer ${token}`,
+   },
+
+  });
+
+
+  const data = await res.json();
+
+
+  if(!res.ok){
+    console.log(data);
+    setOrders([]);
+    return;
   }
+
+
+  if(Array.isArray(data)){
+    setOrders(data);
+  }
+
+
+ }
+ catch(err){
+  console.error(err);
+ }
+
 };
 
   // ======================
@@ -107,16 +118,37 @@ const [soundEnabled, setSoundEnabled] = useState(false);
 //   const interval = setInterval(loadOrders, 20000);
 //   return () => clearInterval(interval);
 // }, [soundEnabled]);
+// useEffect(() => {
+//   const userRole = localStorage.getItem("role");
+//   setRole(userRole);
+
+//   loadOrders();
+
+//   const interval = setInterval(loadOrders, 20000);
+
+//   return () => clearInterval(interval);
+// }, [soundEnabled]);
+
+
 useEffect(() => {
-  const userRole = localStorage.getItem("role");
-  setRole(userRole);
 
-  loadOrders();
+ const userRole = localStorage.getItem("role");
 
-  const interval = setInterval(loadOrders, 20000);
+ setRole(userRole);
 
-  return () => clearInterval(interval);
-}, [soundEnabled]);
+ loadOrders();
+
+
+ const interval=setInterval(
+  loadOrders,
+  20000
+ );
+
+
+ return ()=>clearInterval(interval);
+
+
+},[soundEnabled]);
 
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
@@ -238,12 +270,12 @@ useEffect(() => {
 
                 {/* 🔥 FIXED: instant update */}
                 {/* <StatusUpdate id={o.id} onUpdate={() => loadOrders({ current: orders.length })} /> */}
-                {role === "admin" && (
-                <StatusUpdate
-                  id={o.id}
-                  onUpdate={() => loadOrders()}
-                />
-              )}
+                    {role === "admin" && (
+    <StatusUpdate
+      id={o.id}
+      onUpdate={() => loadOrders()}
+    />
+    )}
 
                 <div className="flex gap-3">
 
@@ -268,26 +300,43 @@ useEffect(() => {
                     Edit
                   </button> */}
                   {role === "admin" && (
-                  <button
-                    onClick={() => {
-                      setEditId(o.id);
-                      setEditData({
-                        name: o.customer_name,
-                        phone: o.phone,
-                        address: o.address,
-                      });
-                    }}
-                    className="text-blue-600 text-sm"
-                  >
-                    Edit
-                  </button>
-                )}
+  <button
+    onClick={async () => {
+
+      const confirmDelete = confirm(
+        "আপনি কি এই order delete করতে চান?"
+      );
+
+      if(!confirmDelete) return;
+
+
+      const token = localStorage.getItem("token");
+
+
+      const res = await fetch(`/api/orders/${o.id}`, {
+        method:"DELETE",
+        headers:{
+          authorization:`Bearer ${token}`
+        }
+      });
+
+
+      if(res.ok){
+        loadOrders();
+      }
+
+    }}
+    className="text-red-600 text-sm"
+  >
+    Delete
+  </button>
+)}
 
                   </div>
               </div>
 
               {/* EDIT FORM */}
-              {editId === o.id && (
+              {role === "admin" && editId === o.id && (
                 <div className="mt-3 p-3 border rounded bg-gray-50">
 
                   <input

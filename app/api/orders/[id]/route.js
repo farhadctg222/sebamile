@@ -27,7 +27,7 @@ export async function PUT(req, context) {
 
 // ✅ status update
 if (body.status) {
-  await db.execute("UPDATE orders SET status=? WHERE id=?", [
+  await database.execute("UPDATE orders SET status=? WHERE id=?", [
     body.status,
     id,
   ]);
@@ -39,7 +39,7 @@ if (
   body.phone !== undefined ||
   body.address !== undefined
 ) {
-  await db.execute(
+  await database.execute(
     "UPDATE orders SET customer_name=?, phone=?, address=? WHERE id=?",
     [
       body.name,

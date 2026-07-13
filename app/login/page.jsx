@@ -24,15 +24,10 @@ export default function Login() {
 
       const data = await res.json();
 
-      // if (data.token) {
-      //   localStorage.setItem("token", data.token);
-      //   router.push("/dashboard");
       if (data.token) {
-  localStorage.setItem("token", data.token);
-  localStorage.setItem("role", data.role);
-
-  router.push("/dashboard");
-}
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("role", data.role);
+        router.push("/dashboard");
       } else {
         alert(data.message || "Login failed");
       }
